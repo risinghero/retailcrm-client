@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -12,7 +14,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="task"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response TasksCreate(Dictionary<string, object> task, string site = "")
+        public Task<Response> TasksCreate(Dictionary<string, object> task, string site = "")
         {
             if (task.Count < 1)
             {
@@ -21,7 +23,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/tasks/create",
-                Request.MethodPost,
+                HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -38,7 +40,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="task"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response TasksUpdate(Dictionary<string, object> task, string site = "")
+        public Task<Response> TasksUpdate(Dictionary<string, object> task, string site = "")
         {
             if (task.Count < 1)
             {
@@ -51,8 +53,8 @@ namespace Retailcrm.Versions.V5
             }
 
             return Request.MakeRequest(
-                $"/tasks/{task["id"].ToString()}/edit",
-                Request.MethodPost,
+                $"/tasks/{task["id"]}/edit",
+                HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -68,11 +70,11 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Response TasksGet(string id)
+        public Task<Response> TasksGet(string id)
         {
             return Request.MakeRequest(
                 $"/tasks/{id}",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -83,9 +85,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response TasksList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> TasksList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -102,7 +104,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/tasks", Request.MethodGet, parameters);
+            return Request.MakeRequest("/tasks", HttpMethod.Get, parameters);
         }
     }
 }

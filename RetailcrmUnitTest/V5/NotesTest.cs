@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
+using System.Threading.Tasks;
 
 namespace RetailcrmUnitTest.V5
 {
@@ -23,7 +24,7 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void NotesCreateDelete()
+        public async Task NotesCreateDelete()
         {
             Dictionary<string, object> customer = new Dictionary<string, object>
             {
@@ -34,7 +35,7 @@ namespace RetailcrmUnitTest.V5
                 {"phone", "+78888888989"}
             };
 
-            Response createResponse = _client.CustomersCreate(customer);
+            Response createResponse = await _client.CustomersCreate(customer);
 
             Assert.IsTrue(createResponse.IsSuccessfull());
             Assert.IsInstanceOfType(createResponse, typeof(Response));
@@ -43,14 +44,7 @@ namespace RetailcrmUnitTest.V5
 
             string id = createResponse.GetResponse()["id"].ToString();
 
-            Response responseFiltered = _client.NotesCreate(
-                new Dictionary<string, object>
-                {
-                    { "text", "test task" },
-                    { "customer", new Dictionary<string, object> { { "id", id } }},
-                    { "managerId", Environment.GetEnvironmentVariable("RETAILCRM_USER")}
-                }
-            );
+            Response responseFiltered = await _client.NotesCreate(new Dictionary<string, object> { { "text", "test task" }, { "customer", new Dictionary<string, object> { { "id", id } } }, { "managerId", Environment.GetEnvironmentVariable("RETAILCRM_USER") } });
 
             Debug.WriteLine(responseFiltered.GetRawResponse());
             Assert.IsTrue(responseFiltered.IsSuccessfull());
@@ -58,7 +52,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(responseFiltered, typeof(Response));
             Assert.IsTrue(responseFiltered.GetResponse().ContainsKey("success"));
 
-            Response response = _client.NotesDelete(responseFiltered.GetResponse()["id"].ToString());
+            Response response = await _client.NotesDelete(responseFiltered.GetResponse()["id"].ToString());
 
             Debug.WriteLine(response.GetRawResponse());
             Assert.IsTrue(response.IsSuccessfull());
@@ -68,11 +62,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void NotesList()
+        public async Task NotesList()
         {
             DateTime datetime = DateTime.Now;
 
-            Response responseFiltered = _client.NotesList(
+            Response responseFiltered = await _client.NotesList(
                 new Dictionary<string, object>
                 {
                     { "createdAtFrom", datetime.AddDays(-30).ToString("yyyy-MM-dd HH:mm:ss") }

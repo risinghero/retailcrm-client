@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm.Versions.V5;
 
@@ -20,16 +21,16 @@ namespace RetailcrmUnitTest.V5
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "This method is unavailable in API V5")]
-        public void TelephonySettingsGetArgumentExeption()
+        public async Task TelephonySettingsGetArgumentExeption()
         {
-            _client.TelephonySettingsGet("anycode");
+            await _client.TelephonySettingsGet("anycode");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "This method is unavailable in API V5")]
-        public void TelephonySettingsGetTelephonySettingsEditArgumentExeption()
+        public async Task TelephonySettingsGetTelephonySettingsEditArgumentExeption()
         {
-            _client.TelephonySettingsEdit(new Dictionary<string, object>());
+            await _client.TelephonySettingsEdit(new Dictionary<string, object>());
         }
     }
 }

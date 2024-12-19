@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V4
@@ -11,7 +13,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="ievent"></param>
         /// <returns></returns>
-        public Response TelephonyCallEvent(Dictionary<string, object> ievent)
+        public Task<Response> TelephonyCallEvent(Dictionary<string, object> ievent)
         {
             if (ievent.Count < 1)
             {
@@ -33,8 +35,8 @@ namespace Retailcrm.Versions.V4
                 throw new ArgumentException("Parameter `hangupStatus` must contains a data");
             }
 
-            List<string> statuses = new List<string> { "answered", "busy", "cancel", "failed", "no answered" };
-            List<string> types = new List<string> { "hangup", "in", "out" };
+            List<string> statuses = ["answered", "busy", "cancel", "failed", "no answered"];
+            List<string> types = ["hangup", "in", "out"];
 
             if (!statuses.Contains(ievent["hangupStatus"].ToString()))
             {
@@ -48,7 +50,7 @@ namespace Retailcrm.Versions.V4
 
             return Request.MakeRequest(
                 "/telephony/call/event",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "event", new JavaScriptSerializer().Serialize(ievent) }
@@ -61,14 +63,14 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Response TelephonySettingsGet(string code)
+        public Task<Response> TelephonySettingsGet(string code)
         {
             if (string.IsNullOrEmpty(code))
             {
                 throw new ArgumentException("Parameter `code` should contain data");
             }
 
-            return Request.MakeRequest($"/telephony/setting/{code}", Request.MethodGet);
+            return Request.MakeRequest($"/telephony/setting/{code}", HttpMethod.Get);
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public Response TelephonySettingsEdit(Dictionary<string, object> configuration)
+        public Task<Response> TelephonySettingsEdit(Dictionary<string, object> configuration)
         {
             if (configuration.Count < 1)
             {
@@ -104,8 +106,8 @@ namespace Retailcrm.Versions.V4
             }
 
             return Request.MakeRequest(
-                $"/telephony/setting/{configuration["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/telephony/setting/{configuration["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "configuration", new JavaScriptSerializer().Serialize(configuration) }

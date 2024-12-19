@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
@@ -21,9 +22,9 @@ namespace RetailcrmUnitTest.V3
 
         [TestMethod]
         [Ignore]
-        public void TelephonyManagerGet()
+        public async Task TelephonyManagerGet()
         {
-            Response response = _client.TelephonyManagerGet("+79999999999");
+            Response response =await _client.TelephonyManagerGet("+79999999999");
             Debug.WriteLine(response.GetRawResponse());
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);

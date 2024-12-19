@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Retailcrm
 {
@@ -17,12 +18,8 @@ namespace Retailcrm
         public Connection(string url, string key)
         {
             if ("/" != url.Substring(url.Length - 1, 1))
-            {
                 url += "/";
-            }
-
             url += "api/";
-
             _request = new Request(url, new Dictionary<string, object> { { "apiKey", key } });
         }
 
@@ -30,11 +27,11 @@ namespace Retailcrm
         /// Get available API versions
         /// </summary>
         /// <returns></returns>
-        public Response Versions()
+        public Task<Response> Versions()
         {
             return _request.MakeRequest(
                 "api-versions",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
 
@@ -42,11 +39,11 @@ namespace Retailcrm
         /// Get available API methods
         /// </summary>
         /// <returns></returns>
-        public Response Credentials()
+        public Task<Response> Credentials()
         {
             return _request.MakeRequest(
                 "credentials",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
     }

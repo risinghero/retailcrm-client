@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -13,7 +14,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="resultOrder"></param>
         /// <param name="technique"></param>
         /// <returns></returns>
-        public Response OrdersCombine(Dictionary<string, object> order, Dictionary<string, object> resultOrder, string technique = "ours")
+        public Task<Response> OrdersCombine(Dictionary<string, object> order, Dictionary<string, object> resultOrder, string technique = "ours")
         {
             if (order.Count <= 0)
             {
@@ -37,7 +38,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/orders/combine",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "technique", technique },

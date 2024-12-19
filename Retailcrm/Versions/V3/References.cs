@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V3
@@ -10,11 +12,11 @@ namespace Retailcrm.Versions.V3
         /// Countries
         /// </summary>
         /// <returns></returns>
-        public Response Countries()
+        public Task<Response> Countries()
         {
             return Request.MakeRequest(
                 "/reference/countries",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -22,11 +24,11 @@ namespace Retailcrm.Versions.V3
         /// Delivery services
         /// </summary>
         /// <returns></returns>
-        public Response DeliveryServices()
+        public Task<Response> DeliveryServices()
         {
             return Request.MakeRequest(
                 "/reference/delivery-services",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -34,11 +36,11 @@ namespace Retailcrm.Versions.V3
         /// Delivery types
         /// </summary>
         /// <returns></returns>
-        public Response DeliveryTypes()
+        public Task<Response> DeliveryTypes()
         {
             return Request.MakeRequest(
                 "/reference/delivery-types",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -46,11 +48,11 @@ namespace Retailcrm.Versions.V3
         /// Order methods
         /// </summary>
         /// <returns></returns>
-        public Response OrderMethods()
+        public Task<Response> OrderMethods()
         {
             return Request.MakeRequest(
                 "/reference/order-methods",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -58,11 +60,11 @@ namespace Retailcrm.Versions.V3
         /// Order types
         /// </summary>
         /// <returns></returns>
-        public Response OrderTypes()
+        public Task<Response> OrderTypes()
         {
             return Request.MakeRequest(
                 "/reference/order-types",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -70,84 +72,63 @@ namespace Retailcrm.Versions.V3
         /// Payment statuses
         /// </summary>
         /// <returns></returns>
-        public Response PaymentStatuses()
+        public Task<Response> PaymentStatuses()
         {
-            return Request.MakeRequest(
-                "/reference/payment-statuses",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/payment-statuses", HttpMethod.Get);
         }
 
         /// <summary>
         /// Payment types
         /// </summary>
         /// <returns></returns>
-        public Response PaymentTypes()
+        public Task<Response> PaymentTypes()
         {
-            return Request.MakeRequest(
-                "/reference/payment-types",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/payment-types", HttpMethod.Get);
         }
 
         /// <summary>
         /// Product statuses
         /// </summary>
         /// <returns></returns>
-        public Response ProductStatuses()
+        public Task<Response> ProductStatuses()
         {
-            return Request.MakeRequest(
-                "/reference/product-statuses",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/product-statuses", HttpMethod.Get);
         }
 
         /// <summary>
         /// Sites
         /// </summary>
         /// <returns></returns>
-        public Response Sites()
+        public Task<Response> Sites()
         {
-            return Request.MakeRequest(
-                "/reference/sites",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/sites", HttpMethod.Get);
         }
 
         /// <summary>
         /// Statuses groups
         /// </summary>
         /// <returns></returns>
-        public Response StatusGroups()
+        public Task<Response> StatusGroups()
         {
-            return Request.MakeRequest(
-                "/reference/status-groups",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/status-groups", HttpMethod.Get);
         }
 
         /// <summary>
         /// Statuses
         /// </summary>
         /// <returns></returns>
-        public Response Statuses()
+        public Task<Response> Statuses()
         {
-            return Request.MakeRequest(
-                "/reference/statuses",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/statuses", HttpMethod.Get);
         }
 
         /// <summary>
         /// Stores
         /// </summary>
         /// <returns></returns>
-        public Response Stores()
+        public Task<Response> Stores()
         {
-            return Request.MakeRequest(
-                "/reference/stores",
-                Request.MethodGet
-            );
+            return Request.MakeRequest("/reference/stores", HttpMethod.Get);
         }
 
         /// <summary>
@@ -155,7 +136,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="service"></param>
         /// <returns></returns>
-        public Response DeliveryServicesEdit(Dictionary<string, object> service)
+        public Task<Response> DeliveryServicesEdit(Dictionary<string, object> service)
         {
             if (!service.ContainsKey("code"))
             {
@@ -168,8 +149,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/delivery-services/{service["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/delivery-services/{service["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "deliveryService", new JavaScriptSerializer().Serialize(service) }
@@ -182,7 +163,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Response DeliveryTypesEdit(Dictionary<string, object> type)
+        public Task<Response> DeliveryTypesEdit(Dictionary<string, object> type)
         {
             if (!type.ContainsKey("code"))
             {
@@ -205,8 +186,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/delivery-types/{type["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/delivery-types/{type["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "deliveryType", new JavaScriptSerializer().Serialize(type) }
@@ -219,7 +200,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="method"></param>
         /// <returns></returns>
-        public Response OrderMethodsEdit(Dictionary<string, object> method)
+        public Task<Response> OrderMethodsEdit(Dictionary<string, object> method)
         {
             if (!method.ContainsKey("code"))
             {
@@ -232,8 +213,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/order-methods/{method["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/order-methods/{method["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "orderMethod", new JavaScriptSerializer().Serialize(method) }
@@ -246,7 +227,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Response OrderTypesEdit(Dictionary<string, object> type)
+        public Task<Response> OrderTypesEdit(Dictionary<string, object> type)
         {
             if (!type.ContainsKey("code"))
             {
@@ -259,8 +240,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/order-types/{type["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/order-types/{type["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "orderType", new JavaScriptSerializer().Serialize(type) }
@@ -273,7 +254,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-        public Response PaymentStatusesEdit(Dictionary<string, object> status)
+        public Task<Response> PaymentStatusesEdit(Dictionary<string, object> status)
         {
             if (!status.ContainsKey("code"))
             {
@@ -286,8 +267,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/payment-statuses/{status["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/payment-statuses/{status["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "paymentStatus", new JavaScriptSerializer().Serialize(status) }
@@ -300,7 +281,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Response PaymentTypesEdit(Dictionary<string, object> type)
+        public Task<Response> PaymentTypesEdit(Dictionary<string, object> type)
         {
             if (!type.ContainsKey("code"))
             {
@@ -313,8 +294,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/payment-types/{type["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/payment-types/{type["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "paymentType", new JavaScriptSerializer().Serialize(type) }
@@ -327,7 +308,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-        public Response ProductStatusesEdit(Dictionary<string, object> status)
+        public Task<Response> ProductStatusesEdit(Dictionary<string, object> status)
         {
             if (!status.ContainsKey("code"))
             {
@@ -340,8 +321,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/product-statuses/{status["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/product-statuses/{status["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "productStatus", new JavaScriptSerializer().Serialize(status) }
@@ -354,7 +335,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response SitesEdit(Dictionary<string, object> site)
+        public Task<Response> SitesEdit(Dictionary<string, object> site)
         {
             if (!site.ContainsKey("code"))
             {
@@ -372,8 +353,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/sites/{site["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/sites/{site["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "site", new JavaScriptSerializer().Serialize(site) }
@@ -386,7 +367,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-        public Response StatusesEdit(Dictionary<string, object> status)
+        public Task<Response> StatusesEdit(Dictionary<string, object> status)
         {
             if (!status.ContainsKey("code"))
             {
@@ -409,8 +390,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/statuses/{status["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/statuses/{status["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "status", new JavaScriptSerializer().Serialize(status) }
@@ -423,7 +404,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="store"></param>
         /// <returns></returns>
-        public Response StoresEdit(Dictionary<string, object> store)
+        public Task<Response> StoresEdit(Dictionary<string, object> store)
         {
             if (!store.ContainsKey("code"))
             {
@@ -435,13 +416,13 @@ namespace Retailcrm.Versions.V3
                 throw new ArgumentException("Parameter `name` is missing");
             }
 
-            List<string> types = new List<string>
-            {
+            List<string> types =
+            [
                 "store-type-online",
                 "store-type-retail",
                 "store-type-supplier",
                 "store-type-warehouse"
-            };
+            ];
 
             if (store.ContainsKey("type") && !types.Contains(store["type"].ToString()))
             {
@@ -449,8 +430,8 @@ namespace Retailcrm.Versions.V3
             }
 
             return Request.MakeRequest(
-                $"/reference/stores/{store["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/stores/{store["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "store", new JavaScriptSerializer().Serialize(store) }

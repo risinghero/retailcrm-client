@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V4
@@ -13,26 +15,16 @@ namespace Retailcrm.Versions.V4
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response StoreProducts(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> StoreProducts(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-
+            Dictionary<string, object> parameters = [];
             if (filter != null && filter.Count > 0)
-            {
                 parameters.Add("filter", filter);
-            }
-
             if (page > 0)
-            {
                 parameters.Add("page", page);
-            }
-
             if (limit > 0)
-            {
                 parameters.Add("limit", limit);
-            }
-
-            return Request.MakeRequest("/store/products", Request.MethodGet, parameters);
+            return Request.MakeRequest("/store/products", HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -40,21 +32,15 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="prices"></param>
         /// <returns></returns>
-        public Response StorePricesUpload(List<object> prices)
+        public Task<Response> StorePricesUpload(List<object> prices)
         {
             if (prices.Count< 1)
-            {
                 throw new ArgumentException("Parameter `prices` must contains a data");
-            }
-
             if (prices.Count > 250)
-            {
                 throw new ArgumentException("Parameter `prices` must contain 250 or less records");
-            }
-
             return Request.MakeRequest(
                 "/store/prices/upload",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "prices", new JavaScriptSerializer().Serialize(prices) }
@@ -67,16 +53,13 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Response StoreSettingGet(string code)
+        public Task<Response> StoreSettingGet(string code)
         {
             if (string.IsNullOrEmpty(code))
-            {
                 throw new ArgumentException("Parameter `code` is mandatory");
-            }
-
             return Request.MakeRequest(
                 $"/store/setting/{code}",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -85,7 +68,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public Response StoreSettingsEdit(Dictionary<string, object> configuration)
+        public Task<Response> StoreSettingsEdit(Dictionary<string, object> configuration)
         {
             if (configuration.Count < 1)
             {
@@ -113,8 +96,8 @@ namespace Retailcrm.Versions.V4
             }
 
             return Request.MakeRequest(
-                $"/store/setting/{configuration["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/store/setting/{configuration["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "configuration", new JavaScriptSerializer().Serialize(configuration) }

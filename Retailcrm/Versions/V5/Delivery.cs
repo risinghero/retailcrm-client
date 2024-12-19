@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Retailcrm.Versions.V5
 {
@@ -10,7 +11,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public new Response DeliverySettingGet(string code)
+        public new Task<Response> DeliverySettingGet(string code)
         {
             throw new ArgumentException("This method is unavailable in API V5", code);
         }
@@ -20,7 +21,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public new Response DeliverySettingsEdit(Dictionary<string, object> configuration)
+        public new Task<Response> DeliverySettingsEdit(Dictionary<string, object> configuration)
         {
             throw new ArgumentException("This method is unavailable in API V5");
         }

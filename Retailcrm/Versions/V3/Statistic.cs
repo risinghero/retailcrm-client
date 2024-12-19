@@ -1,4 +1,6 @@
-﻿namespace Retailcrm.Versions.V3
+﻿using System.Threading.Tasks;
+
+namespace Retailcrm.Versions.V3
 {
     public partial class Client
     {
@@ -6,11 +8,11 @@
         /// Update statistic
         /// </summary>
         /// <returns></returns>
-        public Response StatisticUpdate()
+        public Task<Response> StatisticUpdate()
         {
             return Request.MakeRequest(
                 "/statistic/update",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
     }

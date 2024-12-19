@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -10,11 +11,11 @@ namespace Retailcrm.Versions.V5
         /// Costs groups
         /// </summary>
         /// <returns></returns>
-        public Response CostGroups()
+        public Task<Response> CostGroups()
         {
             return Request.MakeRequest(
                 "/reference/cost-groups",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
 
@@ -22,11 +23,11 @@ namespace Retailcrm.Versions.V5
         /// Costs
         /// </summary>
         /// <returns></returns>
-        public Response CostItems()
+        public Task<Response> CostItems()
         {
             return Request.MakeRequest(
                 "/reference/cost-items",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
 
@@ -34,11 +35,11 @@ namespace Retailcrm.Versions.V5
         /// Legal entities
         /// </summary>
         /// <returns></returns>
-        public Response LegalEntities()
+        public Task<Response> LegalEntities()
         {
             return Request.MakeRequest(
                 "/reference/legal-entities",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
 
@@ -47,7 +48,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public Response CostGroupsEdit(Dictionary<string, object> group)
+        public Task<Response> CostGroupsEdit(Dictionary<string, object> group)
         {
             if (!group.ContainsKey("code"))
             {
@@ -66,7 +67,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/reference/cost-groups/{@group["code"]}/edit",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "costGroup", new JavaScriptSerializer().Serialize(group) }
@@ -79,7 +80,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Response CostItemsEdit(Dictionary<string, object> item)
+        public Task<Response> CostItemsEdit(Dictionary<string, object> item)
         {
             if (!item.ContainsKey("code"))
             {
@@ -96,11 +97,10 @@ namespace Retailcrm.Versions.V5
                 throw new ArgumentException("Parameter `group` is missing");
             }
 
-            List<string> types = new List<string>
-            {
+            List<string> types = [
                 "const",
                 "var"
-            };
+            ];
 
             if (item.ContainsKey("type") && !types.Contains(item["type"].ToString()))
             {
@@ -109,7 +109,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/reference/cost-items/{item["code"]}/edit",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "costItem", new JavaScriptSerializer().Serialize(item) }
@@ -122,7 +122,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public Response LegalEntitiesEdit(Dictionary<string, object> entity)
+        public Task<Response> LegalEntitiesEdit(Dictionary<string, object> entity)
         {
             if (!entity.ContainsKey("code"))
             {
@@ -146,7 +146,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/reference/legal-entities/{entity["code"]}/edit",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "legalEntity", new JavaScriptSerializer().Serialize(entity) }
@@ -158,11 +158,11 @@ namespace Retailcrm.Versions.V5
         /// Couriers list
         /// </summary>
         /// <returns></returns>
-        public Response Couriers()
+        public Task<Response> Couriers()
         {
             return Request.MakeRequest(
                 "/reference/couriers",
-                Request.MethodGet
+                System.Net.Http.HttpMethod.Get
             );
         }
 
@@ -171,11 +171,11 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="courier"></param>
         /// <returns></returns>
-        public Response CouriersCreate(Dictionary<string, object> courier)
+        public Task<Response> CouriersCreate(Dictionary<string, object> courier)
         {
             return Request.MakeRequest(
                 "/reference/couriers/create",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "courier", new JavaScriptSerializer().Serialize(courier) }
@@ -188,7 +188,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="courier"></param>
         /// <returns></returns>
-        public Response CouriersEdit(Dictionary<string, object> courier)
+        public Task<Response> CouriersEdit(Dictionary<string, object> courier)
         {
             if (!courier.ContainsKey("id"))
             {
@@ -197,7 +197,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/reference/couriers/{courier["id"]}/edit",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "courier", new JavaScriptSerializer().Serialize(courier) }

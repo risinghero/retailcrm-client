@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V4
@@ -11,7 +13,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Response DeliverySettingGet(string code)
+        public Task<Response> DeliverySettingGet(string code)
         {
             if (string.IsNullOrEmpty(code))
             {
@@ -20,7 +22,7 @@ namespace Retailcrm.Versions.V4
 
             return Request.MakeRequest(
                 $"/delivery/generic/setting/{code}",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -29,7 +31,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public Response DeliverySettingsEdit(Dictionary<string, object> configuration)
+        public Task<Response> DeliverySettingsEdit(Dictionary<string, object> configuration)
         {
             if (configuration.Count < 1)
             {
@@ -57,8 +59,8 @@ namespace Retailcrm.Versions.V4
             }
 
             return Request.MakeRequest(
-                $"/delivery/generic/setting/{configuration["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/delivery/generic/setting/{configuration["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "configuration", new JavaScriptSerializer().Serialize(configuration) }
@@ -72,7 +74,7 @@ namespace Retailcrm.Versions.V4
         /// <param name="code"></param>
         /// <param name="statusUpdate"></param>
         /// <returns></returns>
-        public Response DeliveryTracking(string code, List<object> statusUpdate)
+        public Task<Response> DeliveryTracking(string code, List<object> statusUpdate)
         {
             if (string.IsNullOrEmpty(code))
             {
@@ -86,7 +88,7 @@ namespace Retailcrm.Versions.V4
 
             return Request.MakeRequest(
                 $"delivery/generic/{code}/edit",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "statusUpdate", new JavaScriptSerializer().Serialize(statusUpdate) }

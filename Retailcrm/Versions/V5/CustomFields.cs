@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -13,9 +15,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response CustomFieldsList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> CustomFieldsList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -32,7 +34,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/custom-fields", Request.MethodGet, parameters);
+            return Request.MakeRequest("/custom-fields", HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -40,12 +42,12 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="customField"></param>
         /// <returns></returns>
-        public Response CustomFieldsCreate(Dictionary<string, object> customField)
+        public Task<Response> CustomFieldsCreate(Dictionary<string, object> customField)
         {
-            List<string> types = new List<string>
-            {
+            List<string> types =
+            [
                 "boolean", "date", "dictionary", "email", "integer", "numeric", "string", "text"
-            };
+            ];
 
             if (customField.Count < 1)
             {
@@ -80,8 +82,8 @@ namespace Retailcrm.Versions.V5
             }
 
             return Request.MakeRequest(
-                $"/custom-fields/{customField["entity"].ToString()}/create",
-                Request.MethodPost,
+                $"/custom-fields/{customField["entity"]}/create",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "customField", new JavaScriptSerializer().Serialize(customField) }
@@ -95,11 +97,11 @@ namespace Retailcrm.Versions.V5
         /// <param name="code"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public Response CustomFieldsGet(string code, string entity)
+        public Task<Response> CustomFieldsGet(string code, string entity)
         {
             return Request.MakeRequest(
                 $"/custom-fields/{entity}/{code}",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -108,7 +110,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="customField"></param>
         /// <returns></returns>
-        public Response CustomFieldsUpdate(Dictionary<string, object> customField)
+        public Task<Response> CustomFieldsUpdate(Dictionary<string, object> customField)
         {
             if (customField.Count < 1)
             {
@@ -126,8 +128,8 @@ namespace Retailcrm.Versions.V5
             }
 
             return Request.MakeRequest(
-                $"/custom-fields/{customField["entity"].ToString()}/{customField["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/custom-fields/{customField["entity"]}/{customField["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "customField", new JavaScriptSerializer().Serialize(customField) }
@@ -142,9 +144,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response CustomDictionaryList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> CustomDictionaryList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -161,7 +163,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/custom-fields/dictionaries", Request.MethodGet, parameters);
+            return Request.MakeRequest("/custom-fields/dictionaries", HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -169,7 +171,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="customDictionary"></param>
         /// <returns></returns>
-        public Response CustomDictionaryCreate(Dictionary<string, object> customDictionary)
+        public Task<Response> CustomDictionaryCreate(Dictionary<string, object> customDictionary)
         {
             if (customDictionary.Count < 1)
             {
@@ -188,7 +190,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/custom-fields/dictionaries/create",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "customDictionary", new JavaScriptSerializer().Serialize(customDictionary) }
@@ -201,11 +203,11 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Response CustomDictionaryGet(string code)
+        public Task<Response> CustomDictionaryGet(string code)
         {
             return Request.MakeRequest(
                 $"/custom-fields/dictionaries/{code}",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -214,7 +216,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="customDictionary"></param>
         /// <returns></returns>
-        public Response CustomDictionaryUpdate(Dictionary<string, object> customDictionary)
+        public Task<Response> CustomDictionaryUpdate(Dictionary<string, object> customDictionary)
         {
             if (customDictionary.Count < 1)
             {
@@ -232,8 +234,8 @@ namespace Retailcrm.Versions.V5
             }
 
             return Request.MakeRequest(
-                $"/custom-fields/dictionaries/{customDictionary["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/custom-fields/dictionaries/{customDictionary["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "customDictionary", new JavaScriptSerializer().Serialize(customDictionary) }

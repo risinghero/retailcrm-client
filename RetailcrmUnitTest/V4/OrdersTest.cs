@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -20,7 +21,7 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void OrdersHistory()
+        public async Task OrdersHistory()
         {
             DateTime datetime = DateTime.Now;
 
@@ -30,7 +31,7 @@ namespace RetailcrmUnitTest.V4
                 { "endDate", datetime.AddHours(-1).ToString("yyyy-MM-dd HH:mm:ss")}
             };
 
-            Response response = _client.OrdersHistory(filter, 1, 50);
+            Response response = await _client.OrdersHistory(filter, 1, 50);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -39,7 +40,7 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void BigOrderCreateUpdate()
+        public async Task BigOrderCreateUpdate()
         {
             long epochTicks = new DateTime(1970, 1, 1).Ticks;
             long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
@@ -104,7 +105,7 @@ namespace RetailcrmUnitTest.V4
                 }
             };
 
-            Response createResponse = _client.OrdersCreate(order);
+            Response createResponse = await _client.OrdersCreate(order);
 
             Assert.IsTrue(createResponse.IsSuccessfull());
             Assert.IsInstanceOfType(createResponse, typeof(Response));
@@ -133,7 +134,7 @@ namespace RetailcrmUnitTest.V4
                 newItems.Add(item);
             }
 
-            Response updateResponse = _client.OrdersUpdate(
+            Response updateResponse = await _client.OrdersUpdate(
                 new Dictionary<string, object> {
                     { "id", createResponse.GetResponse()["id"].ToString()},
                     { "items", newItems }

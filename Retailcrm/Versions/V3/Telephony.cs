@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V3
@@ -12,9 +13,9 @@ namespace Retailcrm.Versions.V3
         /// <param name="phone"></param>
         /// <param name="details"></param>
         /// <returns></returns>
-        public Response TelephonyManagerGet(string phone, string details = "1")
+        public Task<Response> TelephonyManagerGet(string phone, string details = "1")
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (string.IsNullOrEmpty(phone))
             {
@@ -24,7 +25,7 @@ namespace Retailcrm.Versions.V3
             parameters.Add("details", details);
             parameters.Add("phone", phone);
 
-            return Request.MakeRequest("/telephony/manager", Request.MethodGet, parameters);
+            return Request.MakeRequest("/telephony/manager", System.Net.Http.HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="status"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Response TelephonyCallEvent(string phone, string type, string status, string code)
+        public Task<Response> TelephonyCallEvent(string phone, string type, string status, string code)
         {
             if (string.IsNullOrEmpty(phone))
             {
@@ -47,8 +48,8 @@ namespace Retailcrm.Versions.V3
                 throw new ArgumentException("Parameter `phone` must contains a data");
             }
 
-            List<string> statuses = new List<string> { "answered", "busy", "cancel", "failed", "no answered" };
-            List<string> types = new List<string> { "hangup", "in", "out" };
+            List<string> statuses = ["answered", "busy", "cancel", "failed", "no answered"];
+            List<string> types = ["hangup", "in", "out"];
 
             if (!statuses.Contains(status))
             {
@@ -62,7 +63,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 "/telephony/call/event",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "phone", phone },
@@ -78,7 +79,7 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="calls"></param>
         /// <returns></returns>
-        public Response TelephonyCallsUpload(List<object> calls)
+        public Task<Response> TelephonyCallsUpload(List<object> calls)
         {
             if (calls.Count < 1)
             {
@@ -92,7 +93,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 "/telephony/calls/upload",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "calls", new JavaScriptSerializer().Serialize(calls) }
@@ -110,7 +111,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="logo"></param>
         /// <param name="active"></param>
         /// <returns></returns>
-        public Response TelephonySettingsEdit(string code, string clientId, string url, string name, string logo, string active = "true")
+        public Task<Response> TelephonySettingsEdit(string code, string clientId, string url, string name, string logo, string active = "true")
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -134,7 +135,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 $"/telephony/setting/{code}",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "code", code },

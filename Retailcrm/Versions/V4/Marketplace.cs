@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V4
@@ -11,7 +12,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public Response MarketplaceSettingsEdit(Dictionary<string, object> configuration)
+        public Task<Response> MarketplaceSettingsEdit(Dictionary<string, object> configuration)
         {
             if (configuration.Count < 1)
             {
@@ -29,8 +30,8 @@ namespace Retailcrm.Versions.V4
             }
 
             return Request.MakeRequest(
-                $"/marketplace/external/setting/{configuration["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/marketplace/external/setting/{configuration["code"]}/edit",
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "configuration", new JavaScriptSerializer().Serialize(configuration) }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -19,9 +20,9 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void UsersGroups()
+        public async Task UsersGroups()
         {
-            Response usersGroups = _client.UsersGroups();
+            Response usersGroups = await _client.UsersGroups();
             Assert.IsTrue(usersGroups.IsSuccessfull());
             Assert.IsTrue(usersGroups.GetStatusCode() == 200);
             Assert.IsInstanceOfType(usersGroups, typeof(Response));
@@ -29,9 +30,9 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void User()
+        public async Task User()
         {
-            Response usersGroups = _client.User(int.Parse(Environment.GetEnvironmentVariable("RETAILCRM_USER")));
+            Response usersGroups =await _client.User(int.Parse(Environment.GetEnvironmentVariable("RETAILCRM_USER")));
             Assert.IsTrue(usersGroups.IsSuccessfull());
             Assert.IsTrue(usersGroups.GetStatusCode() == 200);
             Assert.IsInstanceOfType(usersGroups, typeof(Response));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -21,9 +22,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void UsersStatus()
+        public async Task UsersStatus()
         {
-            Response users = _client.Users();
+            Response users = await _client.Users();
             Assert.IsTrue(users.IsSuccessfull());
             Assert.IsTrue(users.GetStatusCode() == 200);
             Assert.IsInstanceOfType(users, typeof(Response));
@@ -34,7 +35,7 @@ namespace RetailcrmUnitTest.V5
             Debug.Assert(user != null, nameof(user) + " != null");
             int uid = int.Parse(user["id"].ToString());
             
-            Response status = _client.UsersStatus(uid, "break");
+            Response status = await _client.UsersStatus(uid, "break");
             Assert.IsTrue(status.IsSuccessfull());
             Assert.IsTrue(status.GetStatusCode() == 200);
             Assert.IsInstanceOfType(status, typeof(Response));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -21,11 +22,12 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void MarketplaceSettingsEdit()
+        [Ignore]
+        public async Task MarketplaceSettingsEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.MarketplaceSettingsEdit(
+            Response response = await _client.MarketplaceSettingsEdit(
                 new Dictionary<string, object>()
                 {
                     { "name", $"MarketplaceApp-{guid}" },

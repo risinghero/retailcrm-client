@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -20,9 +21,9 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void PriceTypes()
+        public async Task PriceTypes()
         {
-            Response response = _client.PriceTypes();
+            Response response = await _client.PriceTypes();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -31,11 +32,11 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void PriceTypesEdit()
+        public async Task PriceTypesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.PriceTypesEdit(
+            Response response = await _client.PriceTypesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},

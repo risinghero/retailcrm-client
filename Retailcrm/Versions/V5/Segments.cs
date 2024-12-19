@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Retailcrm.Versions.V5
 {
@@ -11,7 +12,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response Segments(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> Segments(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
@@ -30,7 +31,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/segments", Request.MethodGet, parameters);
+            return Request.MakeRequest("/segments", System.Net.Http.HttpMethod.Get, parameters);
         }
     }
 }

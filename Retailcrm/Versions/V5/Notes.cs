@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -12,7 +14,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="note"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response NotesCreate(Dictionary<string, object> note, string site = "")
+        public Task<Response> NotesCreate(Dictionary<string, object> note, string site = "")
         {
             if (note.Count < 1)
             {
@@ -21,7 +23,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/customers/notes/create",
-                Request.MethodPost,
+                HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -37,11 +39,11 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Response NotesDelete(string id)
+        public Task<Response> NotesDelete(string id)
         {
             return Request.MakeRequest(
                 $"/customers/notes/{id}/delete",
-                Request.MethodPost
+                HttpMethod.Post
             );
         }
 
@@ -52,9 +54,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response NotesList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> NotesList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -71,7 +73,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/customers/notes", Request.MethodGet, parameters);
+            return Request.MakeRequest("/customers/notes", HttpMethod.Get, parameters);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -21,11 +22,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void IntegrationsSettingsEditSettingsGet()
+        public async Task IntegrationsSettingsEditSettingsGet()
         {
             string uid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.IntegrationsSettingsEdit(
+            Response response = await _client.IntegrationsSettingsEdit(
                 new Dictionary<string, object>
                 {
                     { "code", uid},
@@ -42,7 +43,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(response, typeof(Response));
             Assert.IsTrue(response.GetResponse().ContainsKey("success"));
 
-            Response responseGet = _client.IntegrationsSettingGet(uid);
+            Response responseGet = await _client.IntegrationsSettingGet(uid);
 
             Debug.WriteLine(responseGet.GetRawResponse());
             Assert.IsTrue(responseGet.IsSuccessfull());

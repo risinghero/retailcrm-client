@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -22,11 +23,11 @@ namespace RetailcrmUnitTest.V5
 
         [TestMethod]
         [Ignore]
-        public void TasksCreateUpdateGet()
+        public async Task TasksCreateUpdateGet()
         {
             DateTime datetime = DateTime.Now;
 
-            Response responseFiltered = _client.TasksCreate(
+            Response responseFiltered = await _client.TasksCreate(
                 new Dictionary<string, object>
                 {
                     { "text", "test task" },
@@ -42,7 +43,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(responseFiltered, typeof(Response));
             Assert.IsTrue(responseFiltered.GetResponse().ContainsKey("success"));
 
-            Response response = _client.TasksUpdate(
+            Response response = await _client.TasksUpdate(
                 new Dictionary<string, object>
                 {
                     { "id", responseFiltered.GetResponse()["id"].ToString()},
@@ -59,7 +60,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(response, typeof(Response));
             Assert.IsTrue(response.GetResponse().ContainsKey("success"));
 
-            Response responseGet = _client.TasksGet(responseFiltered.GetResponse()["id"].ToString());
+            Response responseGet = await _client.TasksGet(responseFiltered.GetResponse()["id"].ToString());
 
             Debug.WriteLine(responseGet.GetRawResponse());
             Assert.IsTrue(responseGet.IsSuccessfull());
@@ -69,9 +70,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void TasksList()
+        public async Task TasksList()
         {
-            Response responseFiltered = _client.TasksList(
+            Response responseFiltered = await _client.TasksList(
                 new Dictionary<string, object>
                 {
                     { "performers", new List<string> { Environment.GetEnvironmentVariable("RETAILCRM_USER") } },

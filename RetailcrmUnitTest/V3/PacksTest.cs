@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
@@ -24,7 +25,7 @@ namespace RetailcrmUnitTest.V3
 
         [TestMethod]
         [Ignore]
-        public void PacksCreateUpdateReadDelete()
+        public async Task PacksCreateUpdateReadDelete()
         {
             string uid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 12);
 
@@ -48,14 +49,14 @@ namespace RetailcrmUnitTest.V3
                 }
             };
 
-            Response orderCreateResponse = _client.OrdersCreate(order);
+            Response orderCreateResponse = await _client.OrdersCreate(order);
 
             Assert.IsTrue(orderCreateResponse.IsSuccessfull());
             Assert.IsTrue(orderCreateResponse.GetStatusCode() == 201);
             Assert.IsInstanceOfType(orderCreateResponse, typeof(Response));
             Assert.IsTrue(orderCreateResponse.GetResponse().ContainsKey("id"));
 
-            Response orderGetResponse = _client.OrdersGet(orderCreateResponse.GetResponse()["id"].ToString(), "id");
+            Response orderGetResponse = await _client.OrdersGet(orderCreateResponse.GetResponse()["id"].ToString(), "id");
 
             Assert.IsTrue(orderGetResponse.IsSuccessfull());
             Assert.IsTrue(orderGetResponse.GetStatusCode() == 200);
@@ -83,7 +84,7 @@ namespace RetailcrmUnitTest.V3
                 { "itemId", id[0]}
             };
 
-            Response packsCreateResponse = _client.PacksCreate(pack);
+            Response packsCreateResponse = await _client.PacksCreate(pack);
 
             Debug.WriteLine(packsCreateResponse.GetRawResponse());
             Assert.IsTrue(packsCreateResponse.IsSuccessfull());
@@ -99,21 +100,21 @@ namespace RetailcrmUnitTest.V3
                 { "quantity", 2}
             };
 
-            Response packsUpdateResponse = _client.PacksUpdate(packEdit);
+            Response packsUpdateResponse = await _client.PacksUpdate(packEdit);
 
             Assert.IsTrue(packsUpdateResponse.IsSuccessfull());
             Assert.IsTrue(packsUpdateResponse.GetStatusCode() == 200);
             Assert.IsInstanceOfType(packsUpdateResponse, typeof(Response));
             Assert.IsTrue(packsUpdateResponse.GetResponse().ContainsKey("id"));
 
-            Response packsGetResponse = _client.PacksGet(packId);
+            Response packsGetResponse = await _client.PacksGet(packId);
 
             Assert.IsTrue(packsGetResponse.IsSuccessfull());
             Assert.IsTrue(packsGetResponse.GetStatusCode() == 200);
             Assert.IsInstanceOfType(packsGetResponse, typeof(Response));
             Assert.IsTrue(packsGetResponse.GetResponse().ContainsKey("pack"));
 
-            Response packsDeleteResponse = _client.PacksDelete(packId);
+            Response packsDeleteResponse = await _client.PacksDelete(packId);
 
             Assert.IsTrue(packsDeleteResponse.IsSuccessfull());
             Assert.IsTrue(packsDeleteResponse.GetStatusCode() == 200);
@@ -122,14 +123,14 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void PacksList()
+        public async Task PacksList()
         {
             Dictionary<string, object> filter = new Dictionary<string, object>
             {
                 { "store", Environment.GetEnvironmentVariable("RETAILCRM_STORE")}
             };
 
-            Response response = _client.PacksList(filter, 1, 100);
+            Response response = await _client.PacksList(filter, 1, 100);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -138,14 +139,14 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void PacksHistory()
+        public async Task PacksHistory()
         {
             Dictionary<string, object> filter = new Dictionary<string, object>
             {
                 { "endDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}
             };
 
-            Response response = _client.PacksHistory(filter, 2, 100);
+            Response response = await _client.PacksHistory(filter, 2, 100);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -155,30 +156,30 @@ namespace RetailcrmUnitTest.V3
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `pack` must contains a data")]
-        public void PacksCreateArgumentExeption()
+        public async Task PacksCreateArgumentExeption()
         {
             Dictionary<string, object> pack = new Dictionary<string, object>();
-            _client.PacksCreate(pack);
+            await _client.PacksCreate(pack);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `pack` must contains a data")]
-        public void PacksUpdateArgumentExeption()
+        public async Task PacksUpdateArgumentExeption()
         {
             Dictionary<string, object> pack = new Dictionary<string, object>();
-            _client.PacksUpdate(pack);
+            await _client.PacksUpdate(pack);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `pack` must contains an id")]
-        public void PacksUpdateWithoutIdArgumentExeption()
+        public async Task PacksUpdateWithoutIdArgumentExeption()
         {
             Dictionary<string, object> pack = new Dictionary<string, object>
             {
                 { "quantity", 2 }
             };
 
-            _client.PacksUpdate(pack);
+            await _client.PacksUpdate(pack);
         }
     }
 }

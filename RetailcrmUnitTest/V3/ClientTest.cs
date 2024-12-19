@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
+using System.Threading.Tasks;
 
 namespace RetailcrmUnitTest.V3
 {
@@ -30,9 +31,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void StatisticUpdate()
+        public async Task StatisticUpdate()
         {
-            Response response = _client.StatisticUpdate();
+            Response response = await _client.StatisticUpdate();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsInstanceOfType(response, typeof(Response));

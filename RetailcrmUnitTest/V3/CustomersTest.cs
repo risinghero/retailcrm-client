@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
@@ -20,7 +21,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void CustomersCreateReadUpdate()
+        public async Task CustomersCreateReadUpdate()
         {
             Dictionary<string, object> customer = new Dictionary<string, object>
             {
@@ -31,7 +32,7 @@ namespace RetailcrmUnitTest.V3
                 {"phone", "+78888888888"}
             };
 
-            Response createResponse = _client.CustomersCreate(customer);
+            Response createResponse = await _client.CustomersCreate(customer);
 
             Assert.IsTrue(createResponse.IsSuccessfull());
             Assert.IsInstanceOfType(createResponse, typeof(Response));
@@ -40,7 +41,7 @@ namespace RetailcrmUnitTest.V3
 
             string id = createResponse.GetResponse()["id"].ToString();
 
-            Response getResponse = _client.CustomersGet(id, "id");
+            Response getResponse = await _client.CustomersGet(id, "id");
             Assert.IsTrue(getResponse.IsSuccessfull());
             Assert.IsInstanceOfType(getResponse, typeof(Response));
             Assert.IsTrue(createResponse.GetStatusCode() == 201);
@@ -52,14 +53,14 @@ namespace RetailcrmUnitTest.V3
                 {"email", "frodobaggins@example.com"}
             };
 
-            Response updateResponse = _client.CustomersUpdate(update, "id");
+            Response updateResponse = await _client.CustomersUpdate(update, "id");
             Assert.IsTrue(updateResponse.IsSuccessfull());
             Assert.IsInstanceOfType(updateResponse, typeof(Response));
             Assert.IsTrue(updateResponse.GetStatusCode() == 200);
         }
 
         [TestMethod]
-        public void CustomersFixExternalId()
+        public async Task CustomersFixExternalId()
         {
             long epochTicks = new DateTime(1970, 1, 1).Ticks;
             long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
@@ -74,7 +75,7 @@ namespace RetailcrmUnitTest.V3
                 {"phone", "+77777777777"}
             };
 
-            Response createResponse = _client.CustomersCreate(customer);
+            Response createResponse = await _client.CustomersCreate(customer);
             string id = createResponse.GetResponse()["id"].ToString();
             string externalId = $"{unixTime}ID";
 
@@ -92,18 +93,18 @@ namespace RetailcrmUnitTest.V3
             Assert.IsTrue(createResponse.GetStatusCode() == 201);
             Assert.IsTrue(createResponse.GetResponse().ContainsKey("id"));
 
-            Response fixResponse = _client.CustomersFixExternalIds(fix);
+            Response fixResponse = await _client.CustomersFixExternalIds(fix);
             Assert.IsTrue(fixResponse.IsSuccessfull());
             Assert.IsInstanceOfType(fixResponse, typeof(Response));
             Assert.IsTrue(fixResponse.GetStatusCode() == 200);
         }
 
         [TestMethod]
-        public void CustomersList()
+        public async Task CustomersList()
         {
             _client.SetSite(Environment.GetEnvironmentVariable("RETAILCRM_SITE"));
 
-            Response response = _client.CustomersList();
+            Response response = await _client.CustomersList();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -116,7 +117,7 @@ namespace RetailcrmUnitTest.V3
                 { "dateTo", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}
             };
 
-            Response responseFiltered = _client.CustomersList(filter, 2, 100);
+            Response responseFiltered = await _client.CustomersList(filter, 2, 100);
 
             Assert.IsTrue(responseFiltered.IsSuccessfull());
             Assert.IsTrue(responseFiltered.GetStatusCode() == 200);
@@ -125,7 +126,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void CustomersUpload()
+        public async Task CustomersUpload()
         {
             List<object> customers = new List<object>();
 
@@ -143,7 +144,7 @@ namespace RetailcrmUnitTest.V3
                 customers.Add(customer);
             }
 
-            Response response = _client.CustomersUpload(customers);
+            Response response = await _client.CustomersUpload(customers);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 201);

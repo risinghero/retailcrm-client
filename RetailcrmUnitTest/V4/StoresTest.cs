@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -19,9 +20,9 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void StoreProducts()
+        public async Task StoreProducts()
         {
-            Response response = _client.StoreProducts();
+            Response response = await _client.StoreProducts();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);

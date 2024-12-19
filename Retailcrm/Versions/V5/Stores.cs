@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Retailcrm.Versions.V5
 {
@@ -10,7 +11,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public new Response StoreSettingGet(string code)
+        public new Task<Response> StoreSettingGet(string code)
         {
             throw new ArgumentException("This method is unavailable in API V5", code);
         }
@@ -20,7 +21,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public new Response StoreSettingsEdit(Dictionary<string, object> configuration)
+        public new Task<Response> StoreSettingsEdit(Dictionary<string, object> configuration)
         {
             throw new ArgumentException("This method is unavailable in API V5");
         }
@@ -32,9 +33,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response StoreProductsGroups(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> StoreProductsGroups(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -51,7 +52,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/store/products-groups", Request.MethodGet, parameters);
+            return Request.MakeRequest("/store/products-groups", System.Net.Http.HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -61,9 +62,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response StoreProductsProperties(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> StoreProductsProperties(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -80,7 +81,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/store/products/properties", Request.MethodGet, parameters);
+            return Request.MakeRequest("/store/products/properties", System.Net.Http.HttpMethod.Get, parameters);
         }
     }
 }

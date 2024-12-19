@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -21,12 +22,12 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void PaymentsCreateUpdateDelete()
+        public async Task PaymentsCreateUpdateDelete()
         {
             DateTime datetime = DateTime.Now;
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
             
-            Response createResponse = _client.OrdersCreate(new Dictionary<string, object>
+            Response createResponse = await _client.OrdersCreate(new Dictionary<string, object>
             {
                 {"externalId", guid},
                 {"createdAt", datetime.ToString("yyyy-MM-dd HH:mm:ss")},
@@ -41,7 +42,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(createResponse, typeof(Response));
             Assert.IsTrue(createResponse.GetResponse().ContainsKey("id"));
 
-            Response paymentCreateResponse = _client.PaymentsCreate(
+            Response paymentCreateResponse = await _client.PaymentsCreate(
                 new Dictionary<string, object>
                 {
                     { "externalId", guid },
@@ -57,7 +58,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(paymentCreateResponse, typeof(Response));
             Assert.IsTrue(paymentCreateResponse.GetResponse().ContainsKey("success"));
 
-            Response paymentUpdateResponse = _client.PaymentsUpdate(
+            Response paymentUpdateResponse = await _client.PaymentsUpdate(
                 new Dictionary<string, object>
                 {
                     { "id", paymentCreateResponse.GetResponse()["id"].ToString()},
@@ -72,7 +73,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(paymentUpdateResponse, typeof(Response));
             Assert.IsTrue(paymentUpdateResponse.GetResponse().ContainsKey("success"));
 
-            Response response = _client.PaymentsDelete(paymentCreateResponse.GetResponse()["id"].ToString());
+            Response response = await _client.PaymentsDelete(paymentCreateResponse.GetResponse()["id"].ToString());
 
             Debug.WriteLine(response.GetRawResponse());
             Assert.IsTrue(response.IsSuccessfull());

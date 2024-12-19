@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V3
@@ -13,9 +14,9 @@ namespace Retailcrm.Versions.V3
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response StoreInventoriesGet(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> StoreInventoriesGet(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -32,7 +33,7 @@ namespace Retailcrm.Versions.V3
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/store/inventories", Request.MethodGet, parameters);
+            return Request.MakeRequest("/store/inventories", System.Net.Http.HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="offers"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response StoreInventoriesUpload(List<object> offers, string site = "")
+        public Task<Response> StoreInventoriesUpload(List<object> offers, string site = "")
         {
             if (offers.Count< 1)
             {
@@ -55,7 +56,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 "/store/inventories/upload",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>

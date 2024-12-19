@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Retailcrm.Versions.V5
 {
@@ -11,9 +13,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="id"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public Response UsersStatus(int id, string status)
+        public Task<Response> UsersStatus(int id, string status)
         {
-            List<string> statuses = new List<string> { "free", "busy", "dinner", "break"};
+            List<string> statuses = [ "free", "busy", "dinner", "break"];
 
             if (!statuses.Contains(status))
             {
@@ -22,7 +24,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/users/{id}/status",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "status", status }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -11,7 +13,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Response IntegrationsSettingGet(string code)
+        public Task<Response> IntegrationsSettingGet(string code)
         {
             if (string.IsNullOrEmpty(code))
             {
@@ -20,7 +22,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/integration-modules/{code}",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -29,7 +31,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="integrationModule"></param>
         /// <returns></returns>
-        public Response IntegrationsSettingsEdit(Dictionary<string, object> integrationModule)
+        public Task<Response> IntegrationsSettingsEdit(Dictionary<string, object> integrationModule)
         {
             if (integrationModule.Count < 1)
             {
@@ -47,8 +49,8 @@ namespace Retailcrm.Versions.V5
             }
 
             return Request.MakeRequest(
-                $"/integration-modules/{integrationModule["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/integration-modules/{integrationModule["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "integrationModule", new JavaScriptSerializer().Serialize(integrationModule) }

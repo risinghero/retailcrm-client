@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
@@ -21,7 +22,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void InventoriesUpload()
+        public async Task InventoriesUpload()
         {
             List<object> offers = new List<object>
             {
@@ -69,7 +70,7 @@ namespace RetailcrmUnitTest.V3
                 }
             };
 
-            Response response = _client.StoreInventoriesUpload(offers);
+            Response response = await _client.StoreInventoriesUpload(offers);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -78,7 +79,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void Inventories()
+        public async Task Inventories()
         {
             Dictionary<string, object> filter = new Dictionary<string, object>
             {
@@ -86,7 +87,7 @@ namespace RetailcrmUnitTest.V3
                 { "details", 1}
             };
 
-            Response response = _client.StoreInventoriesGet(filter, 1, 50);
+            Response response = await _client.StoreInventoriesGet(filter, 1, 50);
 
             Debug.WriteLine(response.GetRawResponse());
 
@@ -98,15 +99,15 @@ namespace RetailcrmUnitTest.V3
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `offers` must contains a data")]
-        public void StoreInventoriesUploadArgumentExeption()
+        public async Task StoreInventoriesUploadArgumentExeption()
         {
             List<object> offers = new List<object>();
-            _client.StoreInventoriesUpload(offers);
+            await _client.StoreInventoriesUpload(offers);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `offers` must contain 250 or less records")]
-        public void StoreInventoriesUploadLimitArgumentExeption()
+        public async Task StoreInventoriesUploadLimitArgumentExeption()
         {
             List<object> offers = new List<object>();
 
@@ -130,7 +131,7 @@ namespace RetailcrmUnitTest.V3
                 );
             }
 
-            _client.StoreInventoriesUpload(offers);
+            await _client.StoreInventoriesUpload(offers);
         }
     }
 }

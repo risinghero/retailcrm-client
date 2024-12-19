@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
+using System.Threading.Tasks;
 
 namespace RetailcrmUnitTest
 {
@@ -17,9 +18,9 @@ namespace RetailcrmUnitTest
         }
 
         [TestMethod]
-        public void Versions()
+        public async Task Versions()
         {
-            Response response = _connection.Versions();
+            Response response = await _connection.Versions();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsInstanceOfType(response, typeof(Response));
@@ -27,9 +28,9 @@ namespace RetailcrmUnitTest
         }
 
         [TestMethod]
-        public void Credentials()
+        public async Task Credentials()
         {
-            Response response = _connection.Credentials();
+            Response response = await _connection.Credentials();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsInstanceOfType(response, typeof(Response));

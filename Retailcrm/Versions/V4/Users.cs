@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Retailcrm.Versions.V4
 {
@@ -11,9 +13,9 @@ namespace Retailcrm.Versions.V4
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response Users(Dictionary<string, object> filter = null, int page = 0, int limit = 0)
+        public Task<Response> Users(Dictionary<string, object> filter = null, int page = 0, int limit = 0)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -30,7 +32,7 @@ namespace Retailcrm.Versions.V4
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/users", Request.MethodGet, parameters);
+            return Request.MakeRequest("/users", HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -39,9 +41,9 @@ namespace Retailcrm.Versions.V4
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response UsersGroups(int page = 1, int limit = 20)
+        public Task<Response> UsersGroups(int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (page > 0)
             {
@@ -53,7 +55,7 @@ namespace Retailcrm.Versions.V4
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/user-groups", Request.MethodGet, parameters);
+            return Request.MakeRequest("/user-groups", HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -61,9 +63,9 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Response User(int id)
+        public Task<Response> User(int id)
         {
-            return Request.MakeRequest($"/users/{id}", Request.MethodGet);
+            return Request.MakeRequest($"/users/{id}", HttpMethod.Get);
         }
     }
 }

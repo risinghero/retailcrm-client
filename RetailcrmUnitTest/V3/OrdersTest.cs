@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
@@ -20,7 +22,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrdersCreateReadUpdate()
+        public async Task OrdersCreateReadUpdate()
         {
             long epochTicks = new DateTime(1970, 1, 1).Ticks;
             long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
@@ -36,14 +38,14 @@ namespace RetailcrmUnitTest.V3
             };
 
 
-            Response createResponse = _client.OrdersCreate(order);
+            Response createResponse = await _client.OrdersCreate(order);
             Assert.IsTrue(createResponse.IsSuccessfull());
             Assert.IsInstanceOfType(createResponse, typeof(Response));
             Assert.IsTrue(createResponse.GetResponse().ContainsKey("id"));
 
             string id = createResponse.GetResponse()["id"].ToString();
 
-            Response getResponse = _client.OrdersGet(id, "id");
+            Response getResponse = await _client.OrdersGet(id, "id");
             Assert.IsTrue(getResponse.IsSuccessfull());
             Assert.IsInstanceOfType(getResponse, typeof(Response));
             Assert.IsTrue(getResponse.GetResponse().ContainsKey("order"));
@@ -54,14 +56,14 @@ namespace RetailcrmUnitTest.V3
                 {"status", "cancel-other"}
             };
 
-            Response updateResponse = _client.OrdersUpdate(update, "id");
+            Response updateResponse = await _client.OrdersUpdate(update, "id");
             Assert.IsTrue(updateResponse.IsSuccessfull());
             Assert.IsInstanceOfType(updateResponse, typeof(Response));
             Assert.IsTrue(updateResponse.GetStatusCode() == 200);
         }
 
         [TestMethod]
-        public void OrdersFixExternalId()
+        public async Task OrdersFixExternalId()
         {
             long epochTicks = new DateTime(1970, 1, 1).Ticks;
             long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
@@ -76,7 +78,7 @@ namespace RetailcrmUnitTest.V3
                 {"phone", "+79999999999"}
             };
 
-            Response createResponse = _client.OrdersCreate(order);
+            Response createResponse = await _client.OrdersCreate(order);
             string id = createResponse.GetResponse()["id"].ToString();
             string externalId = $"{unixTime}ID";
 
@@ -93,15 +95,15 @@ namespace RetailcrmUnitTest.V3
             Assert.IsInstanceOfType(createResponse, typeof(Response));
             Assert.IsTrue(createResponse.GetResponse().ContainsKey("id"));
 
-            Response fixResponse = _client.OrdersFixExternalIds(fix);
+            Response fixResponse = await _client.OrdersFixExternalIds(fix);
             Assert.IsTrue(fixResponse.IsSuccessfull());
             Assert.IsInstanceOfType(fixResponse, typeof(Response));
         }
 
         [TestMethod]
-        public void OrdersList()
+        public async Task OrdersList()
         {
-            Response response = _client.OrdersList();
+            Response response = await _client.OrdersList();
             
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -114,7 +116,7 @@ namespace RetailcrmUnitTest.V3
                 { "createdAtTo", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}
             };
 
-            Response responseFiltered = _client.OrdersList(filter, 2, 100);
+            Response responseFiltered = await _client.OrdersList(filter, 2, 100);
 
             Assert.IsTrue(responseFiltered.IsSuccessfull());
             Assert.IsTrue(responseFiltered.GetStatusCode() == 200);
@@ -123,9 +125,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrdersHistory()
+        public async Task OrdersHistory()
         {
-            Response response = _client.OrdersHistory();
+            Response response = await _client.OrdersHistory();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -137,7 +139,7 @@ namespace RetailcrmUnitTest.V3
             DateTime from = datetime.AddHours(-24);
             DateTime to = datetime.AddHours(-1);
 
-            Response responseFiltered = _client.OrdersHistory(from, to, 50, 1, false);
+            Response responseFiltered = await _client.OrdersHistory(from, to, 50, 1, false);
 
             Assert.IsTrue(responseFiltered.IsSuccessfull());
             Assert.IsTrue(responseFiltered.GetStatusCode() == 200);
@@ -146,7 +148,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrdersStatuses()
+        public async Task OrdersStatuses()
         {
             List<string> ids = new List<string>();
 
@@ -171,11 +173,11 @@ namespace RetailcrmUnitTest.V3
                         { "status", statuses[i] }
                     };
 
-                Response createResponse = _client.OrdersCreate(order);
+                Response createResponse = await _client.OrdersCreate(order);
                 ids.Add(createResponse.GetResponse()["id"].ToString());
             }
 
-            Response response = _client.OrdersStatuses(ids);
+            Response response = await _client.OrdersStatuses(ids);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -184,7 +186,7 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrdersUpload()
+        public async Task OrdersUpload()
         {
             List<object> orders = new List<object>();
 
@@ -212,7 +214,7 @@ namespace RetailcrmUnitTest.V3
                 orders.Add(order);
             }
 
-            Response response = _client.OrdersUpload(orders);
+            Response response = await _client.OrdersUpload(orders);
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 201);
@@ -222,38 +224,38 @@ namespace RetailcrmUnitTest.V3
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `order` must contains a data")]
-        public void OrdersCreateArgumentExeption()
+        public async Task OrdersCreateArgumentExeption()
         {
             Dictionary<string, object> order = new Dictionary<string, object>();
-            _client.OrdersCreate(order);
+            await _client.OrdersCreate(order);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `order` must contains a data")]
-        public void OrdersUpdateEmptyOrderArgumentExeption()
+        public async Task OrdersUpdateEmptyOrderArgumentExeption()
         {
             Dictionary<string, object> order = new Dictionary<string, object>();
-            _client.OrdersUpdate(order);
+            await _client.OrdersUpdate(order);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `order` must contains an id or externalId")]
-        public void OrdersUpdateIdArgumentExeption()
+        public async Task OrdersUpdateIdArgumentExeption()
         {
             Dictionary<string, object> order = new Dictionary<string, object> {{"status", "cancel-other"}};
-            _client.OrdersUpdate(order);
+            await _client.OrdersUpdate(order);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "You must set the array of `ids` or `externalIds`.")]
-        public void OrdersStatusesArgumentExeption()
+        public async Task OrdersStatusesArgumentExeption()
         {
-            _client.OrdersStatuses(null);
+            await _client.OrdersStatuses(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Too many ids or externalIds. Maximum number of elements is 500")]
-        public void OrdersStatusesLimitArgumentExeption()
+        public async Task OrdersStatusesLimitArgumentExeption()
         {
             List<string> ids = new List<string>();
 
@@ -262,20 +264,20 @@ namespace RetailcrmUnitTest.V3
                 ids.Add(i.ToString());
             }
 
-            _client.OrdersStatuses(ids);
+            await _client.OrdersStatuses(ids);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `orders` must contains a data")]
-        public void OrdersUploadEmptyOrdersArgumentExeption()
+        public async Task OrdersUploadEmptyOrdersArgumentExeption()
         {
             List<object> orders = new List<object>();
-            _client.OrdersUpload(orders);
+            await _client.OrdersUpload(orders);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `orders` must contain 50 or less records")]
-        public void OrdersUploadLimitArgumentExeption()
+        public async Task OrdersUploadLimitArgumentExeption()
         {
             List<object> orders = new List<object>();
 
@@ -294,7 +296,7 @@ namespace RetailcrmUnitTest.V3
                 orders.Add(order);
             }
 
-            _client.OrdersUpload(orders);
+            await _client.OrdersUpload(orders);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -21,7 +22,7 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void OrdersCombine()
+        public async Task OrdersCombine()
         {
             Dictionary<string, object> firstOrder = new Dictionary<string, object>
             {
@@ -34,7 +35,7 @@ namespace RetailcrmUnitTest.V5
             };
 
 
-            Response createFirstResponse = _client.OrdersCreate(firstOrder);
+            Response createFirstResponse = await _client.OrdersCreate(firstOrder);
             Assert.IsTrue(createFirstResponse.IsSuccessfull());
             Assert.IsInstanceOfType(createFirstResponse, typeof(Response));
             Assert.IsTrue(createFirstResponse.GetResponse().ContainsKey("id"));
@@ -52,7 +53,7 @@ namespace RetailcrmUnitTest.V5
             };
 
 
-            Response createSecondResponse = _client.OrdersCreate(secondOrder);
+            Response createSecondResponse = await _client.OrdersCreate(secondOrder);
             Assert.IsTrue(createSecondResponse.IsSuccessfull());
             Assert.IsInstanceOfType(createSecondResponse, typeof(Response));
             Assert.IsTrue(createSecondResponse.GetResponse().ContainsKey("id"));
@@ -69,7 +70,7 @@ namespace RetailcrmUnitTest.V5
                 {"id", secondId }
             };
             
-            Response combineResponse = _client.OrdersCombine(firstCombineOrder, secondCombineOrder);
+            Response combineResponse = await _client.OrdersCombine(firstCombineOrder, secondCombineOrder);
 
             Debug.WriteLine(combineResponse.GetRawResponse());
 
@@ -79,7 +80,7 @@ namespace RetailcrmUnitTest.V5
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `order` must contains a data")]
-        public void OrdersCombineEmptyOrderArgumentExeption()
+        public async Task OrdersCombineEmptyOrderArgumentExeption()
         {
             Dictionary<string, object> firstOrder = new Dictionary<string, object>();
             Dictionary<string, object> secondOrder = new Dictionary<string, object>
@@ -87,12 +88,12 @@ namespace RetailcrmUnitTest.V5
                 { "id", "111" }
             };
 
-            _client.OrdersCombine(firstOrder, secondOrder);
+            await _client.OrdersCombine(firstOrder, secondOrder);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `resultOrder` must contains a data")]
-        public void OrdersCombineEmptyResultOrderArgumentExeption()
+        public async Task OrdersCombineEmptyResultOrderArgumentExeption()
         {
             Dictionary<string, object> secondOrder = new Dictionary<string, object>();
             Dictionary<string, object> firstOrder = new Dictionary<string, object>
@@ -100,12 +101,12 @@ namespace RetailcrmUnitTest.V5
                 { "id", "111" }
             };
 
-            _client.OrdersCombine(firstOrder, secondOrder);
+            await _client.OrdersCombine(firstOrder, secondOrder);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `order` must contains `id` key")]
-        public void OrdersCombineEmptyIdOrderArgumentExeption()
+        public async Task OrdersCombineEmptyIdOrderArgumentExeption()
         {
             Dictionary<string, object> firstOrder = new Dictionary<string, object>
             {
@@ -117,12 +118,12 @@ namespace RetailcrmUnitTest.V5
                 { "id", "111" }
             };
 
-            _client.OrdersCombine(firstOrder, secondOrder);
+            await _client.OrdersCombine(firstOrder, secondOrder);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Parameter `resultOrder` must contains `id` key")]
-        public void OrdersCombineEmptyIdResultOrderArgumentExeption()
+        public async Task OrdersCombineEmptyIdResultOrderArgumentExeption()
         {
             Dictionary<string, object> secondOrder = new Dictionary<string, object>
             {
@@ -134,7 +135,7 @@ namespace RetailcrmUnitTest.V5
                 { "id", "111" }
             };
 
-            _client.OrdersCombine(firstOrder, secondOrder);
+            await _client.OrdersCombine(firstOrder, secondOrder);
         }
     }
 }

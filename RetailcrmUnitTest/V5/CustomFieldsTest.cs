@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -21,9 +22,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CustomFieldsList()
+        public async Task CustomFieldsList()
         {
-            Response responseFiltered = _client.CustomFieldsList(new Dictionary<string, object> { { "entity", "order" } }, 2, 50);
+            Response responseFiltered = await _client.CustomFieldsList(new Dictionary<string, object> { { "entity", "order" } }, 2, 50);
 
             Debug.WriteLine(responseFiltered.GetRawResponse());
             Assert.IsTrue(responseFiltered.IsSuccessfull());
@@ -33,11 +34,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CustomFieldsCreateUpdateRead()
+        public async Task CustomFieldsCreateUpdateRead()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response customFieldsCreateResponse = _client.CustomFieldsCreate(
+            Response customFieldsCreateResponse = await _client.CustomFieldsCreate(
                 new Dictionary<string, object>
                 {
                     { "code", $"customfield{guid}" },
@@ -53,7 +54,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(customFieldsCreateResponse, typeof(Response));
             Assert.IsTrue(customFieldsCreateResponse.GetResponse().ContainsKey("code"));
 
-            Response customFieldGetResponse = _client.CustomFieldsGet($"customfield{guid}", "order");
+            Response customFieldGetResponse = await _client.CustomFieldsGet($"customfield{guid}", "order");
 
             Debug.WriteLine(customFieldGetResponse.GetRawResponse());
             Assert.IsTrue(customFieldGetResponse.IsSuccessfull());
@@ -61,7 +62,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(customFieldGetResponse, typeof(Response));
             Assert.IsTrue(customFieldGetResponse.GetResponse().ContainsKey("customField"));
 
-            Response customFieldsUpdateResponse = _client.CustomFieldsUpdate(
+            Response customFieldsUpdateResponse = await _client.CustomFieldsUpdate(
                 new Dictionary<string, object>
                 {
                     { "code", $"customfield{guid}" },
@@ -80,9 +81,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CustomDictionaryList()
+        public async Task CustomDictionaryList()
         {
-            Response responseFiltered = _client.CustomDictionaryList(new Dictionary<string, object>(), 2, 50);
+            Response responseFiltered = await _client.CustomDictionaryList(new Dictionary<string, object>(), 2, 50);
 
             Debug.WriteLine(responseFiltered.GetRawResponse());
             Assert.IsTrue(responseFiltered.IsSuccessfull());
@@ -92,12 +93,12 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CustomDictionariesCreateUpdateRead()
+        public async Task CustomDictionariesCreateUpdateRead()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
             string fuid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response customDictionaryCreateResponse = _client.CustomDictionaryCreate(
+            Response customDictionaryCreateResponse = await _client.CustomDictionaryCreate(
                 new Dictionary<string, object>
                 {
                     { "code", $"customdict{guid}" },
@@ -122,7 +123,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(customDictionaryCreateResponse, typeof(Response));
             Assert.IsTrue(customDictionaryCreateResponse.GetResponse().ContainsKey("code"));
 
-            Response customDictionaryGetResponse = _client.CustomDictionaryGet(customDictionaryCreateResponse.GetResponse()["code"].ToString());
+            Response customDictionaryGetResponse = await _client.CustomDictionaryGet(customDictionaryCreateResponse.GetResponse()["code"].ToString());
 
             Debug.WriteLine(customDictionaryGetResponse.GetRawResponse());
             Assert.IsTrue(customDictionaryGetResponse.IsSuccessfull());
@@ -130,7 +131,7 @@ namespace RetailcrmUnitTest.V5
             Assert.IsInstanceOfType(customDictionaryGetResponse, typeof(Response));
             Assert.IsTrue(customDictionaryGetResponse.GetResponse().ContainsKey("customDictionary"));
 
-            Response customDictionaryEditResponse = _client.CustomDictionaryUpdate(
+            Response customDictionaryEditResponse = await _client.CustomDictionaryUpdate(
                 new Dictionary<string, object>
                 {
                     { "code", $"customdict{guid}" },

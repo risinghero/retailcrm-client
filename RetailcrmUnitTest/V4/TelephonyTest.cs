@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -24,33 +25,9 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void TelephonySettingsEdit()
+        public async Task TelephonySettingsEdit()
         {
-            Response response = _client.TelephonySettingsEdit(
-                new Dictionary<string, object>
-                {
-
-                    { "code", _telephonyCode},
-                    { "clientId", "4717" },
-                    { "makeCallUrl", $"http://{_telephonyCode}.example.com/call"},
-                    { "name", $"TestTelephony-{_telephonyCode}"},
-                    { "image",  _logoUrl},
-                    { "inputEventSupported", true},
-                    { "outputEventSupported", true},
-                    { "hangupEventSupported", true},
-                    {
-                        "additionalCodes",
-                        new List<object>
-                        {
-                            new Dictionary<string, object>
-                            {
-                                { "userId", Environment.GetEnvironmentVariable("RETAILCRM_USER") },
-                                { "code", _phoneCode }
-                            }
-                        }
-                    }
-                }
-            );
+            Response response = await _client.TelephonySettingsEdit(new Dictionary<string, object> { { "code", _telephonyCode }, { "clientId", "4717" }, { "makeCallUrl", $"http://{_telephonyCode}.example.com/call" }, { "name", $"TestTelephony-{_telephonyCode}" }, { "image", _logoUrl }, { "inputEventSupported", true }, { "outputEventSupported", true }, { "hangupEventSupported", true }, { "additionalCodes", new List<object> { new Dictionary<string, object> { { "userId", Environment.GetEnvironmentVariable("RETAILCRM_USER") }, { "code", _phoneCode } } } } });
 
             Debug.WriteLine(response.GetRawResponse());
             Assert.IsTrue(response.IsSuccessfull());
@@ -61,9 +38,9 @@ namespace RetailcrmUnitTest.V4
 
         [TestMethod]
         [Ignore]
-        public void TelephonyCallEvent()
+        public async Task TelephonyCallEvent()
         {
-            Response response = _client.TelephonyCallEvent(
+            Response response = await _client.TelephonyCallEvent(
                 new Dictionary<string, object>
                 {
                     { "phone",  "+79999999999" },

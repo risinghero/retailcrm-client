@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V4
@@ -10,11 +12,11 @@ namespace Retailcrm.Versions.V4
         /// Price types
         /// </summary>
         /// <returns></returns>
-        public Response PriceTypes()
+        public Task<Response> PriceTypes()
         {
             return Request.MakeRequest(
                 "/reference/price-types",
-                Request.MethodGet
+                HttpMethod.Get
             );
         }
 
@@ -23,7 +25,7 @@ namespace Retailcrm.Versions.V4
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Response PriceTypesEdit(Dictionary<string, object> type)
+        public Task<Response> PriceTypesEdit(Dictionary<string, object> type)
         {
             if (!type.ContainsKey("code"))
             {
@@ -36,8 +38,8 @@ namespace Retailcrm.Versions.V4
             }
 
             return Request.MakeRequest(
-                $"/reference/price-types/{type["code"].ToString()}/edit",
-                Request.MethodPost,
+                $"/reference/price-types/{type["code"]}/edit",
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "priceType", new JavaScriptSerializer().Serialize(type) }

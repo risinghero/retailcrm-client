@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V3;
@@ -20,9 +21,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void Countries()
+        public async Task Countries()
         {
-            Response response = _client.Countries();
+            Response response = await _client.Countries();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -31,9 +32,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void DeliveryServices()
+        public async Task DeliveryServices()
         {
-            Response response = _client.DeliveryServices();
+            Response response = await _client.DeliveryServices();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -42,9 +43,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void DeliveryTypes()
+        public async Task DeliveryTypes()
         {
-            Response response = _client.DeliveryTypes();
+            Response response = await _client.DeliveryTypes();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -53,9 +54,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrderMethods()
+        public async Task OrderMethods()
         {
-            Response response = _client.OrderMethods();
+            Response response = await _client.OrderMethods();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -64,9 +65,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrderTypes()
+        public async Task OrderTypes()
         {
-            Response response = _client.OrderTypes();
+            Response response = await _client.OrderTypes();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -75,9 +76,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void PaymentStatuses()
+        public async Task PaymentStatuses()
         {
-            Response response = _client.PaymentStatuses();
+            Response response = await _client.PaymentStatuses();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -86,9 +87,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void PaymentTypes()
+        public async Task PaymentTypes()
         {
-            Response response = _client.PaymentTypes();
+            Response response = await _client.PaymentTypes();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -97,9 +98,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void ProductStatuses()
+        public async Task ProductStatuses()
         {
-            Response response = _client.ProductStatuses();
+            Response response = await _client.ProductStatuses();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -108,9 +109,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void Sites()
+        public async Task Sites()
         {
-            Response response = _client.Sites();
+            Response response = await _client.Sites();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -119,9 +120,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void StatusGroups()
+        public async Task StatusGroups()
         {
-            Response response = _client.StatusGroups();
+            Response response = await _client.StatusGroups();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -130,9 +131,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void Statuses()
+        public async Task Statuses()
         {
-            Response response = _client.Statuses();
+            Response response = await _client.Statuses();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -141,9 +142,9 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void Stores()
+        public async Task Stores()
         {
-            Response response = _client.Stores();
+            Response response = await _client.Stores();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -152,11 +153,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void DeliveryServicesEdit()
+        public async Task DeliveryServicesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.DeliveryServicesEdit(
+            Response response = await _client.DeliveryServicesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -171,11 +172,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void DeliveryTypesEdit()
+        public async Task DeliveryTypesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.DeliveryTypesEdit(
+            Response response = await _client.DeliveryTypesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -192,11 +193,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrderMethodsEdit()
+        public async Task OrderMethodsEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.OrderMethodsEdit(
+            Response response =await _client.OrderMethodsEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -211,11 +212,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void OrderTypesEdit()
+        public async Task OrderTypesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.OrderTypesEdit(
+            Response response = await _client.OrderTypesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -230,11 +231,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void PaymentStatusesEdit()
+        public async Task PaymentStatusesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.PaymentStatusesEdit(
+            Response response = await _client.PaymentStatusesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -249,11 +250,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void PaymentTypesEdit()
+        public async Task PaymentTypesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.PaymentTypesEdit(
+            Response response = await _client.PaymentTypesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -268,11 +269,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void ProductStatusesEdit()
+        public async Task ProductStatusesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.ProductStatusesEdit(
+            Response response = await _client.ProductStatusesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -287,11 +288,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void SitesEdit()
+        public async Task SitesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.SitesEdit(
+            Response response = await _client.SitesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -306,11 +307,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void StatusesEdit()
+        public async Task StatusesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.StatusesEdit(
+            Response response = await _client.StatusesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -327,11 +328,11 @@ namespace RetailcrmUnitTest.V3
         }
 
         [TestMethod]
-        public void StoresEdit()
+        public async Task StoresEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.StoresEdit(
+            Response response = await _client.StoresEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},

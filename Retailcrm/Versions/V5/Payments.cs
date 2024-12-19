@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -12,7 +13,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="payment"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response PaymentsCreate(Dictionary<string, object> payment, string site = "")
+        public Task<Response> PaymentsCreate(Dictionary<string, object> payment, string site = "")
         {
             if (payment.Count < 1)
             {
@@ -31,7 +32,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/orders/payments/create",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -49,7 +50,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="by"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response PaymentsUpdate(Dictionary<string, object> payment, string by = "id", string site = "")
+        public Task<Response> PaymentsUpdate(Dictionary<string, object> payment, string by = "id", string site = "")
         {
             if (payment.Count < 1)
             {
@@ -67,7 +68,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 $"/orders/payments/{uid}/edit",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -84,11 +85,11 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Response PaymentsDelete(string id)
+        public Task<Response> PaymentsDelete(string id)
         {
             return Request.MakeRequest(
                 $"/orders/payments/{id}/delete",
-                Request.MethodPost
+                System.Net.Http.HttpMethod.Post
             );
         }
     }

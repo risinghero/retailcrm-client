@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -21,9 +22,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CostGroups()
+        public async Task CostGroups()
         {
-            Response response = _client.CostGroups();
+            Response response = await _client.CostGroups();
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
             Assert.IsInstanceOfType(response, typeof(Response));
@@ -31,9 +32,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CostItems()
+        public async Task CostItems()
         {
-            Response response = _client.CostItems();
+            Response response = await _client.CostItems();
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
             Assert.IsInstanceOfType(response, typeof(Response));
@@ -41,9 +42,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void LegalEntities()
+        public async Task LegalEntities()
         {
-            Response response = _client.LegalEntities();
+            Response response = await _client.LegalEntities();
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
             Assert.IsInstanceOfType(response, typeof(Response));
@@ -51,16 +52,15 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CostGroupsEdit()
+        public async Task CostGroupsEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
-
-            Response response = _client.CostGroupsEdit(
+            Response response = await _client.CostGroupsEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
                     { "name", $"TestCostGroup-{guid}" },
-                    { "color", "#da5c98" }
+                    { "color", "#dd4040" }
                 }
             );
 
@@ -71,11 +71,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CostItemsEdit()
+        public async Task CostItemsEdit()
         {
             string groupGuid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response groupResponse = _client.CostGroupsEdit(
+            Response groupResponse = await _client.CostGroupsEdit(
                 new Dictionary<string, object>
                 {
                     { "code", groupGuid},
@@ -91,7 +91,7 @@ namespace RetailcrmUnitTest.V5
 
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.CostItemsEdit(
+            Response response = await _client.CostItemsEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -108,11 +108,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void LegalEntitiesEdit()
+        public async Task LegalEntitiesEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 6);
 
-            Response response = _client.LegalEntitiesEdit(
+            Response response = await _client.LegalEntitiesEdit(
                 new Dictionary<string, object>
                 {
                     { "code", guid},
@@ -131,9 +131,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void Couriers()
+        public async Task Couriers()
         {
-            Response response = _client.Couriers();
+            Response response = await _client.Couriers();
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
             Assert.IsInstanceOfType(response, typeof(Response));
@@ -141,11 +141,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CouriersCreate()
+        public async Task CouriersCreate()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 3);
 
-            Response response = _client.CouriersCreate(
+            Response response = await _client.CouriersCreate(
                 new Dictionary<string, object>
                 {
                     { "firstName", $"CourierFirstName-{guid}"},
@@ -164,11 +164,11 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void CouriersEdit()
+        public async Task CouriersEdit()
         {
             string guid = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 3);
 
-            Response response = _client.CouriersCreate(
+            Response response = await _client.CouriersCreate(
                 new Dictionary<string, object>
                 {
                     { "firstName", $"CourierFirstName-{guid}"},
@@ -187,7 +187,7 @@ namespace RetailcrmUnitTest.V5
 
             string id = response.GetResponse()["id"].ToString();
 
-            Response responseEdit = _client.CouriersEdit(
+            Response responseEdit = await _client.CouriersEdit(
                 new Dictionary<string, object>
                 {
                     { "id", id},

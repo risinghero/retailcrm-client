@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V5;
@@ -20,9 +21,9 @@ namespace RetailcrmUnitTest.V5
         }
 
         [TestMethod]
-        public void Segments()
+        public async Task Segments()
         {
-            Response responseFiltered = _client.Segments(
+            Response responseFiltered = await _client.Segments(
                 new Dictionary<string, object>
                 {
                     { "active", "1" }

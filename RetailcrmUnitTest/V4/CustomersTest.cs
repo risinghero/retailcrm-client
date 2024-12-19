@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Retailcrm;
 using Retailcrm.Versions.V4;
@@ -20,9 +21,9 @@ namespace RetailcrmUnitTest.V4
         }
 
         [TestMethod]
-        public void CustomersHistory()
+        public async Task CustomersHistory()
         {
-            Response response = _client.CustomersHistory();
+            Response response = await _client.CustomersHistory();
 
             Assert.IsTrue(response.IsSuccessfull());
             Assert.IsTrue(response.GetStatusCode() == 200);
@@ -31,7 +32,7 @@ namespace RetailcrmUnitTest.V4
 
             DateTime datetime = DateTime.Now;
 
-            Response responseFiltered = _client.CustomersHistory(
+            Response responseFiltered = await _client.CustomersHistory(
                 new Dictionary<string, object>
                 {
                     { "startDate", datetime.AddMonths(-2).ToString("yyyy-MM-dd HH:mm:ss") },

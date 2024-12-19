@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V3
@@ -12,7 +13,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="order"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response OrdersCreate(Dictionary<string, object> order, string site = "")
+        public Task<Response> OrdersCreate(Dictionary<string, object> order, string site = "")
         {
             if (order.Count < 1)
             {
@@ -21,7 +22,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 "/orders/create",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -39,7 +40,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="by"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response OrdersUpdate(Dictionary<string, object> order, string by = "externalId", string site = "")
+        public Task<Response> OrdersUpdate(Dictionary<string, object> order, string by = "externalId", string site = "")
         {
             if (order.Count < 1)
             {
@@ -57,7 +58,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 $"/orders/{uid}/edit",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -76,13 +77,13 @@ namespace Retailcrm.Versions.V3
         /// <param name="by"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response OrdersGet(string id, string by = "externalId", string site = "")
+        public Task<Response> OrdersGet(string id, string by = "externalId", string site = "")
         {
             CheckIdParameter(by);
 
             return Request.MakeRequest(
                 $"/orders/{id}",
-                Request.MethodGet,
+                System.Net.Http.HttpMethod.Get,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -100,7 +101,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response OrdersList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> OrdersList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
@@ -119,7 +120,7 @@ namespace Retailcrm.Versions.V3
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/orders", Request.MethodGet, parameters);
+            return Request.MakeRequest("/orders", System.Net.Http.HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -127,11 +128,11 @@ namespace Retailcrm.Versions.V3
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public Response OrdersFixExternalIds(Dictionary<string, object>[] ids)
+        public Task<Response> OrdersFixExternalIds(Dictionary<string, object>[] ids)
         {
             return Request.MakeRequest(
                 "/orders/fix-external-ids",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "orders", new JavaScriptSerializer().Serialize(ids) }
@@ -148,9 +149,9 @@ namespace Retailcrm.Versions.V3
         /// <param name="offset"></param>
         /// <param name="skipMyChanges"></param>
         /// <returns></returns>
-        public Response OrdersHistory(DateTime? startDate = null, DateTime? endDate = null, int limit = 200, int offset = 0, bool skipMyChanges = true)
+        public Task<Response> OrdersHistory(DateTime? startDate = null, DateTime? endDate = null, int limit = 200, int offset = 0, bool skipMyChanges = true)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (startDate != null)
             {
@@ -176,7 +177,7 @@ namespace Retailcrm.Versions.V3
             
             return Request.MakeRequest(
                 "/orders/history",
-                Request.MethodGet,
+                System.Net.Http.HttpMethod.Get,
                 parameters
             );
         }
@@ -187,9 +188,9 @@ namespace Retailcrm.Versions.V3
         /// <param name="ids"></param>
         /// <param name="externalIds"></param>
         /// <returns></returns>
-        public Response OrdersStatuses(List<string> ids, List<string> externalIds = null)
+        public Task<Response> OrdersStatuses(List<string> ids, List<string> externalIds = null)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (ids == null && externalIds == null)
             {
@@ -217,7 +218,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 "/orders/statuses",
-                Request.MethodGet,
+                System.Net.Http.HttpMethod.Get,
                 parameters
             );
         }
@@ -228,7 +229,7 @@ namespace Retailcrm.Versions.V3
         /// <param name="orders"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response OrdersUpload(List<object> orders, string site = "")
+        public Task<Response> OrdersUpload(List<object> orders, string site = "")
         {
             if (orders.Count < 1)
             {
@@ -242,7 +243,7 @@ namespace Retailcrm.Versions.V3
 
             return Request.MakeRequest(
                 "/orders/upload",
-                Request.MethodPost,
+                System.Net.Http.HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>

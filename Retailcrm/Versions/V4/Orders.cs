@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Retailcrm.Versions.V4
 {
@@ -11,7 +13,7 @@ namespace Retailcrm.Versions.V4
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response OrdersHistory(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> OrdersHistory(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
@@ -30,7 +32,7 @@ namespace Retailcrm.Versions.V4
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/orders/history", Request.MethodGet, parameters);
+            return Request.MakeRequest("/orders/history", HttpMethod.Get, parameters);
         }
     }
 }

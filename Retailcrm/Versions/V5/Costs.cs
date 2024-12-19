@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
 namespace Retailcrm.Versions.V5
@@ -13,9 +15,9 @@ namespace Retailcrm.Versions.V5
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public Response CostsList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
+        public Task<Response> CostsList(Dictionary<string, object> filter = null, int page = 1, int limit = 20)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = [];
 
             if (filter != null && filter.Count > 0)
             {
@@ -32,7 +34,7 @@ namespace Retailcrm.Versions.V5
                 parameters.Add("limit", limit);
             }
 
-            return Request.MakeRequest("/costs", Request.MethodGet, parameters);
+            return Request.MakeRequest("/costs", HttpMethod.Get, parameters);
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="cost"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response CostsCreate(Dictionary<string, object> cost, string site = "")
+        public Task<Response> CostsCreate(Dictionary<string, object> cost, string site = "")
         {
             if (cost.Count < 1)
             {
@@ -70,7 +72,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/costs/create",
-                Request.MethodPost,
+                HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
@@ -86,7 +88,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public Response CostsDelete(List<string> ids)
+        public Task<Response> CostsDelete(List<string> ids)
         {
             if (ids.Count < 1)
             {
@@ -95,7 +97,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/costs/delete",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "ids", new JavaScriptSerializer().Serialize(ids) }
@@ -108,7 +110,7 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="costs"></param>
         /// <returns></returns>
-        public Response CostsUpload(List<object> costs)
+        public Task<Response> CostsUpload(List<object> costs)
         {
             if (costs.Count < 1)
             {
@@ -122,7 +124,7 @@ namespace Retailcrm.Versions.V5
 
             return Request.MakeRequest(
                 "/costs/upload",
-                Request.MethodPost,
+                HttpMethod.Post,
                 new Dictionary<string, object>
                 {
                     { "costs", new JavaScriptSerializer().Serialize(costs) }
@@ -135,9 +137,9 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Response CostsGet(int id)
+        public Task<Response> CostsGet(int id)
         {
-            return Request.MakeRequest($"/costs/{id}", Request.MethodGet);
+            return Request.MakeRequest($"/costs/{id}", HttpMethod.Get);
         }
 
         /// <summary>
@@ -145,11 +147,11 @@ namespace Retailcrm.Versions.V5
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Response CostsDelete(string id)
+        public Task<Response> CostsDelete(string id)
         {
             return Request.MakeRequest(
                 $"/costs/{id}/delete",
-                Request.MethodPost
+                HttpMethod.Post
             );
         }
 
@@ -159,7 +161,7 @@ namespace Retailcrm.Versions.V5
         /// <param name="cost"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public Response CostsUpdate(Dictionary<string, object> cost, string site = "")
+        public Task<Response> CostsUpdate(Dictionary<string, object> cost, string site = "")
         {
             if (cost.Count < 1)
             {
@@ -172,8 +174,8 @@ namespace Retailcrm.Versions.V5
             }
 
             return Request.MakeRequest(
-                $"/costs/{cost["id"].ToString()}/edit",
-                Request.MethodPost,
+                $"/costs/{cost["id"]}/edit",
+                HttpMethod.Post,
                 FillSite(
                     site,
                     new Dictionary<string, object>
